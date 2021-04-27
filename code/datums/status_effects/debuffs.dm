@@ -776,28 +776,28 @@
 	alert_type = null
 	on_remove_on_mob_delete = TRUE
 	///underlay used to indicate that someone is marked
-	var/mutable_appearance/marked_underlay
+	var/mutable_appearance/marked_overlay
 	///path for the underlay
 	var/effect_sprite = ""
 
 /datum/status_effect/eldritch/on_creation(mob/living/new_owner, ...)
-	marked_underlay = mutable_appearance('icons/effects/effects.dmi', effect_sprite,BELOW_MOB_LAYER)
+	marked_overlay = mutable_appearance('icons/effects/effects.dmi', effect_sprite)
 	return ..()
 
 /datum/status_effect/eldritch/on_apply()
 	if(owner.mob_size >= MOB_SIZE_HUMAN)
-		owner.add_overlay(marked_underlay)
+		owner.add_overlay(marked_overlay)
 		owner.update_icon()
 		return TRUE
 	return FALSE
 
 /datum/status_effect/eldritch/on_remove()
-	owner.cut_overlay(marked_underlay)
+	owner.cut_overlay(marked_overlay)
 	owner.update_icon()
 	return ..()
 
 /datum/status_effect/eldritch/Destroy()
-	QDEL_NULL(marked_underlay)
+	QDEL_NULL(marked_overlay)
 	return ..()
 
 /**
