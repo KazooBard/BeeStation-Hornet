@@ -167,7 +167,7 @@
 /datum/eldritch_knowledge/summon/raw_prophet
 	name = "Raw Ritual"
 	gain_text = "The Uncanny Man, who walks alone in the valley between the worlds... I was able to summon his aid."
-	desc = "You can now summon a Raw Prophet by transmutating a pair of eyes, a left arm and a pool of blood. Raw prophets have increased seeing range, as well as X-Ray vision, but they are very fragile."
+	desc = "You can now summon a Raw Prophet by transmutating a pair of eyes, a pair of arms and a pool of blood. Raw prophets have increased seeing range, as well as X-Ray vision, but they are very fragile."
 	cost = 1
 	required_atoms = list(/obj/item/organ/eyes,/obj/item/bodypart/l_arm,/obj/item/bodypart/r_arm,/obj/effect/decal/cleanable/blood)
 	mob_to_summon = /mob/living/simple_animal/hostile/eldritch/raw_prophet
@@ -177,7 +177,7 @@
 /datum/eldritch_knowledge/summon/stalker
 	name = "Lonely Ritual"
 	gain_text = "I was able to combine my greed and desires to summon an eldritch beast I had never seen before. An ever shapeshifting mass of flesh, it knew well my goals."
-	desc = "You can now summon a Stalker by transmutating a pair of eyes, a candle, a pen and a piece of paper. Stalkers can shapeshift into harmless animals to get close to the victim."
+	desc = "You can now summon a Stalker by transmutating a kitchen knife, a poppy, a pen and a piece of paper. Stalkers can shapeshift into harmless animals to get close to the victim."
 	cost = 1
 	required_atoms = list(/obj/item/kitchen/knife,/obj/item/reagent_containers/food/snacks/grown/poppy,/obj/item/pen,/obj/item/paper)
 	mob_to_summon = /mob/living/simple_animal/hostile/eldritch/stalker
@@ -187,7 +187,7 @@
 /datum/eldritch_knowledge/final/flesh_final
 	name = "Priest's Final Hymn"
 	gain_text = "Man of this world. Hear me! For the time of the lord of arms has come! Emperor of Flesh guides my army!"
-	desc = "Bring 3 bodies onto a transmutation rune to gain the ability of shedding your human form, and gaining untold power."
+	desc = "Bring 3 bodies onto a transmutation rune to gain the ability of shedding your human form, and gaining untold power. You will also be able to make more servants as well as gain resistances to puny damage afflicting the physical form, as your human form also is strenghtened slightly."
 	required_atoms = list(/mob/living/carbon/human)
 	cost = 3
 	route = PATH_FLESH

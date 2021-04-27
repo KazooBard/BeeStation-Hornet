@@ -21,7 +21,7 @@
 /datum/eldritch_knowledge/ashen_grasp
 	name = "Grasp of Ash"
 	gain_text = "Gates have opened, minds have flooded, I remain."
-	desc = "Empowers your mansus grasp to throw away enemies."
+	desc = "Empowers your mansus grasp to blind enemies."
 	cost = 1
 	next_knowledge = list(/datum/eldritch_knowledge/spell/ashen_shift)
 	route = PATH_ASH
@@ -37,24 +37,10 @@
 	C.blur_eyes(10)
 	return
 
-/datum/eldritch_knowledge/ashen_grasp/on_eldritch_blade(atom/target, mob/user, proximity_flag, click_parameters)
-	. = ..()
-	if(!iscarbon(target))
-		return
-	var/mob/living/carbon/C = target
-	var/datum/status_effect/eldritch/E = C.has_status_effect(/datum/status_effect/eldritch/rust) || C.has_status_effect(/datum/status_effect/eldritch/ash) || C.has_status_effect(/datum/status_effect/eldritch/flesh)
-	if(E)
-		E.on_effect()
-		for(var/X in user.mind.spell_list)
-			if(!istype(X,/obj/effect/proc_holder/spell/targeted/touch/mansus_grasp))
-				continue
-			var/obj/effect/proc_holder/spell/targeted/touch/mansus_grasp/MG = X
-			MG.charge_counter = min(round(MG.charge_counter + MG.charge_max * 0.75),MG.charge_max) // refunds 75% of charge.
-
 /datum/eldritch_knowledge/ash_mark
 	name = "Mark of ash"
 	gain_text = "The Nightwatcher was a very particular man, always watching in the dead of night. But in spite of his duty, he regularly tranced through the manse with his blazing lantern held high."
-	desc = "Your Mansus Grasp now applies the Mark of Ash on hit. Attack the afflicted with your Sickly Blade to detonate the mark. Upon detonation, the Mark of Ash causes stamina damage and burn damage, and spreads to an additional nearby opponent. The damage decreases with each spread."
+	desc = "Your Mansus Grasp now applies the Mark of Ash on hit. Attack the afflicted with your Sickly Blade to detonate the mark. Upon detonation, the Mark of Ash ignites targets and those around them."
 	cost = 2
 	next_knowledge = list(/datum/eldritch_knowledge/mad_mask)
 	banned_knowledge = list(/datum/eldritch_knowledge/rust_mark,/datum/eldritch_knowledge/flesh_mark)
@@ -64,12 +50,12 @@
 	. = ..()
 	if(isliving(target))
 		var/mob/living/living_target = target
-		living_target.apply_status_effect(/datum/status_effect/eldritch/ash,5)
+		living_target.apply_status_effect(/datum/status_effect/eldritch/ash)
 
 /datum/eldritch_knowledge/mad_mask
 	name = "Mask of Madness"
 	gain_text = "He walks the world, unnoticed by the masses."
-	desc = "Allows you to transmute any mask, with a candle and a pair of eyes, to create a mask of madness, It causes passive stamina damage to everyone around the wearer and hallucinations, can be forced on a non believer to make him unable to take it off..."
+	desc = "Allows you to transmute a pool of blood, with a screwdriver and a pair of eyes, to create a mask of madness, It causes passive stamina damage to everyone around the wearer and hallucinations, can be forced on a non believer to make him unable to take it off..."
 	result_atoms = list(/obj/item/clothing/mask/void_mask)
 	required_atoms = list(/obj/item/organ/eyes,/obj/item/screwdriver,/obj/effect/decal/cleanable/blood)
 	next_knowledge = list(/datum/eldritch_knowledge/curse/corrosion,/datum/eldritch_knowledge/ash_blade_upgrade,/datum/eldritch_knowledge/curse/paralysis)
@@ -104,7 +90,7 @@
 /datum/eldritch_knowledge/final/ash_final
 	name = "Ashlord's rite"
 	gain_text = "The Nightwatcher found the rite and shared it amongst mankind! For now I am one with the fire, WITNESS MY ASCENSION!"
-	desc = "Bring 3 corpses onto a transmutation rune, you will become immune to fire, the vacuum of space, cold and other enviromental hazards and become overall sturdier to all other damages. You will gain a spell that passively creates ring of fire around you as well ,as you will gain a powerful ability that lets you create a wave of flames all around you."
+	desc = "Bring 3 corpses onto a transmutation rune, you will become immune to fire, the vacuum of space, cold and other enviromental hazards and become overall sturdier to all other damages. You will gain a spell that passively creates ring of fire around you as well ,as you will gain a powerful ability that lets you create a wave of flames all around you. All air around you will be heated up."
 	required_atoms = list(/mob/living/carbon/human)
 	cost = 3
 	route = PATH_ASH
