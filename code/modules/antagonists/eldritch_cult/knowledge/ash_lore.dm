@@ -37,6 +37,16 @@
 	C.blur_eyes(10)
 	return
 
+/datum/eldritch_knowledge/ashen_grasp/on_eldritch_blade(atom/target, mob/user, proximity_flag, click_parameters)
+	. = ..()
+	if(!iscarbon(target))
+		return
+	var/mob/living/carbon/C = target
+	var/datum/status_effect/eldritch/E = C.has_status_effect(/datum/status_effect/eldritch/rust) || C.has_status_effect(/datum/status_effect/eldritch/ash) || C.has_status_effect(/datum/status_effect/eldritch/flesh)
+	if(E)
+		E.on_effect()
+
+
 /datum/eldritch_knowledge/ash_mark
 	name = "Mark of ash"
 	gain_text = "The Nightwatcher was a very particular man, always watching in the dead of night. But in spite of his duty, he regularly tranced through the manse with his blazing lantern held high."

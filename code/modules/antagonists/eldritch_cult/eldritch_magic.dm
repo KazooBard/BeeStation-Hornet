@@ -4,7 +4,7 @@
 	school = "transmutation"
 	invocation = "ASH'N P'SSG'"
 	invocation_type = INVOCATION_WHISPER
-	charge_max = 150
+	charge_max = 250
 	range = -1
 	action_icon = 'icons/mob/actions/actions_ecult.dmi'
 	action_icon_state = "ash_shift"

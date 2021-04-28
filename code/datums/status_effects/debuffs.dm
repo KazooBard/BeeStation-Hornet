@@ -771,7 +771,7 @@
 	msg_stage++
 
 /datum/status_effect/eldritch
-	duration = 15 SECONDS
+	duration = 10 SECONDS
 	status_type = STATUS_EFFECT_REPLACE
 	alert_type = null
 	on_remove_on_mob_delete = TRUE
@@ -806,7 +806,7 @@
   * Adds actual functionality to each mark
   */
 /datum/status_effect/eldritch/proc/on_effect()
-	playsound(owner, 'sound/magic/repulse.ogg', 75, TRUE)
+	playsound(owner, 'sound/magic/forcewall.ogg', 75, TRUE)
 	qdel(src) //what happens when this is procced.
 
 //Each mark has diffrent effects when it is destroyed that combine with the mansus grasp effect.
