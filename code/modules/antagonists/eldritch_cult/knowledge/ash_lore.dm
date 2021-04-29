@@ -111,8 +111,8 @@
 	user.mind.AddSpell(new /obj/effect/proc_holder/spell/aoe_turf/fire_cascade/big)
 	user.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/fire_sworn)
 	var/mob/living/carbon/human/H = user
-	H.physiology.brute_mod *= 0.5
-	H.physiology.burn_mod *= 0.5
+	H.physiology.brute_mod *= 0.75
+	H.physiology.burn_mod *= 0.75
 	for(var/X in trait_list)
 		ADD_TRAIT(user,X,MAGIC_TRAIT)
 	return ..()

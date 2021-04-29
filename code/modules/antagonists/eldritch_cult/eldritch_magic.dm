@@ -403,40 +403,49 @@
 	action_background_icon_state = "bg_ecult"
 
 /obj/effect/proc_holder/spell/targeted/fire_sworn
-	name = "Oath of Fire"
-	desc = "For a minute you will passively create a ring of fire around you."
-	invocation = "FL'MS"
-	invocation_type = INVOCATION_WHISPER
+	name = "Speak in tongues of ash"
+	desc = "For a minute you will passively ignite those around you, causing mind damage."
+	invocation = "IT IS A PUNISHMENT, A PUNISHMENT UPON US!"
+	invocation_type = INVOCATION_SHOUT
 	clothes_req = FALSE
 	action_background_icon_state = "bg_ecult"
 	range = -1
-	include_user = TRUE
-	charge_max = 700
+	charge_max = 5
 	action_icon = 'icons/mob/actions/actions_ecult.dmi'
 	action_icon_state = "fire_ring"
-	///how long it lasts
-	var/duration = 1 MINUTES
+	active = FALSE
 	///who casted it right now
-	var/mob/current_user
-	///Determines if you get the fire ring effect
-	var/has_fire_ring = FALSE
+	var/mob/user
 
 /obj/effect/proc_holder/spell/targeted/fire_sworn/cast(list/targets, mob/user)
 	. = ..()
-	current_user = user
-	has_fire_ring = TRUE
-	addtimer(CALLBACK(src, .proc/remove, user), duration, TIMER_OVERRIDE|TIMER_UNIQUE)
+	if(!active)
+		START_PROCESSING(SSobj,src)
+	else
+		STOP_PROCESSING(SSobj,src)
+		
 
-/obj/effect/proc_holder/spell/targeted/fire_sworn/proc/remove()
-	has_fire_ring = FALSE
+/obj/effect/proc_holder/spell/targeted/fire_sworn/process()		
+	for(var/mob/living/carbon/human/human_in_range in hearers(25,user))
+		if(IS_HERETIC(human_in_range) || IS_HERETIC_MONSTER(human_in_range))
+			continue
 
-/obj/effect/proc_holder/spell/targeted/fire_sworn/process()
-	. = ..()
-	if(!has_fire_ring)
-		return
-	for(var/turf/open/T in RANGE_TURFS(1,current_user))
-		new /obj/effect/hotspot(T)
-		T.hotspot_expose(700,50,1)
+		SEND_SIGNAL(human_in_range, ASH_WHISPERING_ACT)
+
+		if(prob(100))
+			human_in_range.hallucination += 5
+			human_in_range.fire_stacks += 4
+			human_in_range
+
+		if(prob(40))
+			human_in_range.Jitter(5)
+
+		if(prob(30))
+			human_in_range.emote(pick("giggle","laugh"))
+			human_in_range.adjustStaminaLoss(10)
+
+		if(prob(25))
+			human_in_range.Dizzy(5)
 
 
 /obj/effect/proc_holder/spell/targeted/worm_contract
