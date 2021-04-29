@@ -394,7 +394,7 @@
 		sleep(3)
 
 /obj/effect/proc_holder/spell/aoe_turf/fire_cascade/big
-	range = 6
+	range = 25
 
 /obj/effect/proc_holder/spell/targeted/telepathy/eldritch
 	invocation = ""
@@ -419,9 +419,11 @@
 
 /obj/effect/proc_holder/spell/targeted/fire_sworn/cast(list/targets, mob/user)
 	. = ..()
-	if(!active)
+	if(active)
+		user.forcesay("STARTED PROCESSING")
 		START_PROCESSING(SSobj,src)
 	else
+		user.forcesay("STOPPED PROCESSING")
 		STOP_PROCESSING(SSobj,src)
 		
 
@@ -434,17 +436,18 @@
 
 		if(prob(100))
 			human_in_range.hallucination += 5
-			human_in_range.fire_stacks += 4
-			human_in_range
+			human_in_range.apply_status_effect(/datum/status_effect/ashen_flames)
 
-		if(prob(40))
-			human_in_range.Jitter(5)
+		if(prob(100))
+			human_in_range.emote(pick("laugh","cry"))
+			
+		if(prob(30))			
+			human_in_range.forcesay(pick("FORGIVE ME FATHER FOR I HAVE SINNED!!!","PLEASE, I BEG YOU!!!","ALL HAIL THE ASHLORD, FOR HE WILL CLEANSE US!!!", "THE CLEANSER HAS ARRIVED, THE END IS NIGH!", "AS A PHOENIX FROM THE ASHES WE SHALL RISE AGAIN!!!"))
+
+		if(prob(35))
+			human_in_range.emote(pick("giggle","laugh"))
 
 		if(prob(30))
-			human_in_range.emote(pick("giggle","laugh"))
-			human_in_range.adjustStaminaLoss(10)
-
-		if(prob(25))
 			human_in_range.Dizzy(5)
 
 

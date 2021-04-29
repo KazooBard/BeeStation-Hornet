@@ -885,3 +885,13 @@
 			H.adjustOrganLoss(ORGAN_SLOT_TONGUE,10)
 		if(100)
 			H.adjustOrganLoss(ORGAN_SLOT_BRAIN,20)
+
+/datum/status_effect/ashen_flames
+	id = "ashen_flame"
+
+/datum/status_effect/ashen_flames/on_apply()
+	if(iscarbon(owner))
+		var/mob/living/carbon/carbon_owner = owner
+		carbon_owner.adjust_fire_stacks(5)
+		carbon_owner.IgniteMob()
+		carbon_owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, 1)
