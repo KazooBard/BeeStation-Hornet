@@ -1,5 +1,5 @@
 /datum/eldritch_knowledge/base_ash
-	name = "Nightwatcher's secret"	
+	name = "Nightwatcher's secret"
 	desc = "Opens up the Path of Ash to you. Allows you to transmute a match with a kitchen knife, or its derivatives, into an Ashen Blade."
 	gain_text = "The City Guard know their watch. If you ask them at night, they may tell you about the ashy lantern."
 	banned_knowledge = list(/datum/eldritch_knowledge/base_rust,/datum/eldritch_knowledge/base_flesh,/datum/eldritch_knowledge/final/rust_final,/datum/eldritch_knowledge/final/flesh_final)
@@ -109,7 +109,7 @@
 /datum/eldritch_knowledge/final/ash_final/on_finished_recipe(mob/living/user, list/atoms, loc)
 	priority_announce("$^@&#*$^@(#&$(@&#^$&#^@# Fear the blaze, for the Ashlord, [user.real_name] has ascended! The flames shall consume all! $^@&#*$^@(#&$(@&#^$&#^@#","#$^@&#*$^@(#&$(@&#^$&#^@#", 'sound/ai/spanomalies.ogg')
 	user.mind.AddSpell(new /obj/effect/proc_holder/spell/aoe_turf/fire_cascade/big)
-	user.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/fire_sworn)
+	user.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/trial_by_fire)
 	var/mob/living/carbon/human/H = user
 	H.physiology.brute_mod *= 0.75
 	H.physiology.burn_mod *= 0.75

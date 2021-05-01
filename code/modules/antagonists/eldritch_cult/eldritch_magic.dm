@@ -394,7 +394,7 @@
 		sleep(3)
 
 /obj/effect/proc_holder/spell/aoe_turf/fire_cascade/big
-	range = 25
+	range = 150
 
 /obj/effect/proc_holder/spell/targeted/telepathy/eldritch
 	invocation = ""
@@ -402,7 +402,7 @@
 	clothes_req = FALSE
 	action_background_icon_state = "bg_ecult"
 
-/obj/effect/proc_holder/spell/targeted/fire_sworn
+/obj/effect/proc_holder/spell/targeted/trial_by_fire
 	name = "Speak in tongues of ash"
 	desc = "For a minute you will passively ignite those around you, causing mind damage."
 	invocation = "IT IS A PUNISHMENT, A PUNISHMENT UPON US!"
@@ -414,42 +414,37 @@
 	action_icon = 'icons/mob/actions/actions_ecult.dmi'
 	action_icon_state = "fire_ring"
 	active = FALSE
-	///who casted it right now
+	include_user = TRUE
 	var/mob/user
 
-/obj/effect/proc_holder/spell/targeted/fire_sworn/cast(list/targets, mob/user)
+/obj/effect/proc_holder/spell/targeted/trial_by_fire/cast(list/targets, mob/user)
 	. = ..()
+	user.say("Point before active toggle reached")
+	active = !active
 	if(active)
-		user.forcesay("STARTED PROCESSING")
-		START_PROCESSING(SSobj,src)
+		for(var/mob/living/carbon/human/human_in_range in hearers(25,user))
+			if(IS_HERETIC(human_in_range) || IS_HERETIC_MONSTER(human_in_range))
+				continue
+
+			SEND_SIGNAL(human_in_range, ASH_WHISPERING_ACT)
+
+			if(prob(100))
+				human_in_range.hallucination += 5
+				human_in_range.apply_status_effect(/datum/status_effect/ashen_flames)
+
+			if(prob(100))
+				human_in_range.emote(pick("laugh","cry"))
+
+			if(prob(30))
+				human_in_range.forcesay(pick("FORGIVE ME FATHER FOR I HAVE SINNED!!!","PLEASE, I BEG YOU!!!","ALL HAIL THE ASHLORD, FOR HE WILL CLEANSE US!!!", "THE CLEANSER HAS ARRIVED, THE END IS NIGH!", "AS A PHOENIX FROM THE ASHES WE SHALL RISE AGAIN!!!"))
+
+			if(prob(35))
+				human_in_range.emote(pick("giggle","laugh"))
+
+			if(prob(30))
+				human_in_range.Dizzy(5)
 	else
-		user.forcesay("STOPPED PROCESSING")
-		STOP_PROCESSING(SSobj,src)
-		
-
-/obj/effect/proc_holder/spell/targeted/fire_sworn/process()		
-	for(var/mob/living/carbon/human/human_in_range in hearers(25,user))
-		if(IS_HERETIC(human_in_range) || IS_HERETIC_MONSTER(human_in_range))
-			continue
-
-		SEND_SIGNAL(human_in_range, ASH_WHISPERING_ACT)
-
-		if(prob(100))
-			human_in_range.hallucination += 5
-			human_in_range.apply_status_effect(/datum/status_effect/ashen_flames)
-
-		if(prob(100))
-			human_in_range.emote(pick("laugh","cry"))
-			
-		if(prob(30))			
-			human_in_range.forcesay(pick("FORGIVE ME FATHER FOR I HAVE SINNED!!!","PLEASE, I BEG YOU!!!","ALL HAIL THE ASHLORD, FOR HE WILL CLEANSE US!!!", "THE CLEANSER HAS ARRIVED, THE END IS NIGH!", "AS A PHOENIX FROM THE ASHES WE SHALL RISE AGAIN!!!"))
-
-		if(prob(35))
-			human_in_range.emote(pick("giggle","laugh"))
-
-		if(prob(30))
-			human_in_range.Dizzy(5)
-
+		return
 
 /obj/effect/proc_holder/spell/targeted/worm_contract
 	name = "Force Contract"
