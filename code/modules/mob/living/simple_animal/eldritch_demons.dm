@@ -362,9 +362,10 @@
 	icon_state = "stalker"
 	status_flags = CANPUSH
 	icon_living = "stalker"
-	maxHealth = 150
-	health = 150
+	maxHealth = 75
+	health = 75
 	melee_damage = 20
 	sight = SEE_MOBS
-	spells_to_add = list(/obj/effect/proc_holder/spell/targeted/ethereal_jaunt/shift/ash,/obj/effect/proc_holder/spell/targeted/shapeshift/eldritch,/obj/effect/proc_holder/spell/targeted/emplosion/eldritch)
+	ventcrawler = VENTCRAWLER_ALWAYS
+	spells_to_add = list(/obj/effect/proc_holder/spell/targeted/shapeshift/eldritch)
 

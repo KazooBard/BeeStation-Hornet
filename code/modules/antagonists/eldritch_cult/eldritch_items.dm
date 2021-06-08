@@ -160,8 +160,15 @@
 	desc = "A torn, dust-caked hood. Strange eyes line the inside."
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR|HIDEFACIALHAIR
 	flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
+	clothing_flags = THICKMATERIAL
+	cold_protection = HEAD
+	min_cold_protection_temperature = SPACE_SUIT_MIN_TEMP_PROTECT
+	heat_protection = HEAD
+	max_heat_protection_temperature = SPACE_SUIT_MAX_TEMP_PROTECT
 	flash_protect = 1
+	bang_protect = 1
 
+//will keep defaults for future admins.
 /obj/item/clothing/suit/hooded/cultrobes/eldritch
 	name = "ominous armor"
 	desc = "A ragged, dusty set of robes. Strange eyes line the inside."
@@ -171,8 +178,74 @@
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS
 	allowed = list(/obj/item/melee/sickly_blade, /obj/item/forbidden_book)
 	hoodtype = /obj/item/clothing/head/hooded/cult_hoodie/eldritch
+	clothing_flags = THICKMATERIAL
+	cold_protection = CHEST | GROIN | LEGS | FEET | ARMS | HANDS
+	min_cold_protection_temperature = SPACE_SUIT_MIN_TEMP_PROTECT
+	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
+	max_heat_protection_temperature = SPACE_SUIT_MAX_TEMP_PROTECT
 	// slightly better than normal cult robes
-	armor = list("melee" = 50, "bullet" = 50, "laser" = 50,"energy" = 50, "bomb" = 35, "bio" = 20, "rad" = 0, "fire" = 20, "acid" = 20, "stamina" = 60)
+	armor = list("melee" = 50, "bullet" = 50, "laser" = 50,"energy" = 50, "bomb" = 35, "bio" = 20, "rad" = 0, "fire" = 20, "acid" = 20, "stamina" = 30)
+
+/obj/item/clothing/suit/hooded/cultrobes/eldritch/ash
+	name = "Cleanser's Robes"
+	armor = list("melee" = 40, "bullet" = 30, "laser" = 60,"energy" = 60, "bomb" = 40, "bio" = 35, "rad" = 0, "fire" = 100, "acid" = 20, "stamina" = 30)
+	var/mob/living/carbon/human/local_wearer
+	
+	
+/obj/item/clothing/suit/hooded/cultrobes/eldritch/ash/equipped(mob/user, slot)
+	. = ..()
+	if(slot == ITEM_SLOT_OCLOTHING && ishuman(user) && user.mind)
+		local_wearer = user
+		START_PROCESSING(SSobj,src)
+
+/obj/item/clothing/suit/hooded/cultrobes/eldritch/ash/dropped(mob/M)
+	local_wearer = null
+	STOP_PROCESSING(SSobj,src)
+	return ..()
+
+/obj/item/clothing/suit/hooded/cultrobes/eldritch/ash/process()
+	if(!local_wearer)
+		return PROCESS_KILL
+
+	for(var/mob/living/carbon/human/human_in_range in viewers(9,local_wearer))
+		if(IS_HERETIC(human_in_range) || IS_HERETIC_MONSTER(human_in_range))
+			continue
+
+		SEND_SIGNAL(human_in_range,COMSIG_HUMAN_VOID_MASK_ACT,rand(-1,-10))
+
+		if(prob(100))
+			human_in_range.apply_status_effect(/datum/status_effect/ashen_flames)
+
+/obj/item/clothing/suit/hooded/cultrobes/eldritch/flesh
+	name = "Witch's Gown"
+	armor = list("melee" = 25, "bullet" = 50, "laser" = 50,"energy" = 50, "bomb" = 40, "bio" = 35, "rad" = 100, "fire" = 20, "acid" = 30, "stamina" = 30)
+
+/obj/item/clothing/suit/hooded/cultrobes/eldritch/rust
+	name = "Martyr's Rags"
+	armor = list("melee" = 60, "bullet" = 40, "laser" = 40,"energy" = 40, "bomb" = 100, "bio" = 35, "rad" = 0, "fire" = 30, "acid" = 20, "stamina" = 15)
+	var/mob/living/carbon/human/local_wearer_rust
+	
+	
+/obj/item/clothing/suit/hooded/cultrobes/eldritch/rust/equipped(mob/user, slot)
+	. = ..()
+	if(slot == ITEM_SLOT_OCLOTHING && ishuman(user) && user.mind)
+		local_wearer_rust = user
+		START_PROCESSING(SSobj,src)
+
+/obj/item/clothing/suit/hooded/cultrobes/eldritch/rust/dropped(mob/M)
+	local_wearer_rust = null
+	STOP_PROCESSING(SSobj,src)
+	return ..()
+
+/obj/item/clothing/suit/hooded/cultrobes/eldritch/rust/process(list/targets, mob/user = usr)
+	if(!local_wearer_rust)
+		return PROCESS_KILL
+
+	for(var/turf/T in targets)
+		var/chance = 100 - (max(get_dist(T,user),1)-1)*100/(2)
+		if(!prob(chance))
+			continue
+		T.rust_heretic_act()
 
 /obj/item/reagent_containers/glass/beaker/eldritch
 	name = "flask of eldritch essence"

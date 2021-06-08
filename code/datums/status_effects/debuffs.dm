@@ -892,6 +892,6 @@
 /datum/status_effect/ashen_flames/on_apply()
 	if(iscarbon(owner))
 		var/mob/living/carbon/carbon_owner = owner
-		carbon_owner.adjust_fire_stacks(5)
+		carbon_owner.adjust_fire_stacks(3)
 		carbon_owner.IgniteMob()
 		carbon_owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, 1)

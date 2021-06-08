@@ -9,21 +9,12 @@
 	cost = 1
 	route = PATH_ASH
 
-/datum/eldritch_knowledge/spell/ashen_shift
-	name = "Ashen Shift"
-	gain_text = "The Nightwatcher was the first of them, his treason started it all."
-	desc = "A short range jaunt that can help you escape from bad situations."
-	cost = 1
-	spell_to_add = /obj/effect/proc_holder/spell/targeted/ethereal_jaunt/shift/ash
-	next_knowledge = list(/datum/eldritch_knowledge/ash_mark,/datum/eldritch_knowledge/essence,/datum/eldritch_knowledge/ashen_eyes)
-	route = PATH_ASH
-
 /datum/eldritch_knowledge/ashen_grasp
 	name = "Grasp of Ash"
 	gain_text = "Gates have opened, minds have flooded, I remain."
 	desc = "Empowers your mansus grasp to blind enemies."
 	cost = 1
-	next_knowledge = list(/datum/eldritch_knowledge/spell/ashen_shift)
+	next_knowledge = list(/datum/eldritch_knowledge/spell/ashen_rewind)
 	route = PATH_ASH
 
 /datum/eldritch_knowledge/ashen_grasp/on_mansus_grasp(atom/target, mob/user, proximity_flag, click_parameters)
@@ -46,13 +37,31 @@
 	if(E)
 		E.on_effect()
 
+/datum/eldritch_knowledge/spell/ashen_rewind
+	name = "Ashen rewind"
+	gain_text = "Ashes to ashes, dust to dust, and as such your time will come, but fear not as you will be granted life again by your savior."
+	desc = "Let's you rewind back after 15 seconds."
+	cost = 1
+	spell_to_add = /obj/effect/proc_holder/spell/targeted/ashen_rewind
+	next_knowledge = list(/datum/eldritch_knowledge/spell/ashen_shift)
+	route = PATH_ASH
+
+/datum/eldritch_knowledge/spell/ashen_shift
+	name = "Ashen Shift"
+	gain_text = "The Nightwatcher was the first of them, his treason started it all."
+	desc = "A short range jaunt that can help you escape from bad situations."
+	cost = 1
+	spell_to_add = /obj/effect/proc_holder/spell/targeted/ethereal_jaunt/shift/ash
+	next_knowledge = list(/datum/eldritch_knowledge/ash_mark,/datum/eldritch_knowledge/essence,/datum/eldritch_knowledge/ashen_eyes)
+	route = PATH_ASH
+
 
 /datum/eldritch_knowledge/ash_mark
 	name = "Mark of ash"
 	gain_text = "The Nightwatcher was a very particular man, always watching in the dead of night. But in spite of his duty, he regularly tranced through the manse with his blazing lantern held high."
 	desc = "Your Mansus Grasp now applies the Mark of Ash on hit. Attack the afflicted with your Sickly Blade to detonate the mark. Upon detonation, the Mark of Ash ignites targets and those around them."
 	cost = 2
-	next_knowledge = list(/datum/eldritch_knowledge/mad_mask)
+	next_knowledge = list(/datum/eldritch_knowledge/spell/flame_birth)
 	banned_knowledge = list(/datum/eldritch_knowledge/rust_mark,/datum/eldritch_knowledge/flesh_mark)
 	route = PATH_ASH
 
@@ -62,15 +71,6 @@
 		var/mob/living/living_target = target
 		living_target.apply_status_effect(/datum/status_effect/eldritch/ash)
 
-/datum/eldritch_knowledge/mad_mask
-	name = "Mask of Madness"
-	gain_text = "He walks the world, unnoticed by the masses."
-	desc = "Allows you to transmute a pool of blood, with a screwdriver and a pair of eyes, to create a mask of madness, It causes passive stamina damage to everyone around the wearer and hallucinations, can be forced on a non believer to make him unable to take it off..."
-	result_atoms = list(/obj/item/clothing/mask/void_mask)
-	required_atoms = list(/obj/item/organ/eyes,/obj/item/screwdriver,/obj/effect/decal/cleanable/blood)
-	next_knowledge = list(/datum/eldritch_knowledge/curse/corrosion,/datum/eldritch_knowledge/ash_blade_upgrade,/datum/eldritch_knowledge/curse/paralysis)
-	cost = 1
-	route = PATH_ASH
 
 /datum/eldritch_knowledge/spell/flame_birth
 	name = "Flame Birth"
@@ -78,15 +78,15 @@
 	desc = "Short range spell that allows you to curse someone with massive sanity loss."
 	cost = 1
 	spell_to_add = /obj/effect/proc_holder/spell/targeted/fiery_rebirth
-	next_knowledge = list(/datum/eldritch_knowledge/spell/cleave,/datum/eldritch_knowledge/summon/ashy,/datum/eldritch_knowledge/final/ash_final)
+	next_knowledge = list(/datum/eldritch_knowledge/armor/ash, /datum/eldritch_knowledge/ash_blade_upgrade)
 	route = PATH_ASH
 
 /datum/eldritch_knowledge/ash_blade_upgrade
 	name = "Fiery blade"
 	gain_text = "Blade in hand, he swung and swung as the ash fell from the skies. His city, his people... all burnt to cinders, and yet life still remained in his charred body."
 	desc = "Your blade of choice will now light your enemies ablaze."
-	cost = 2
-	next_knowledge = list(/datum/eldritch_knowledge/spell/flame_birth)
+	cost = 1
+	next_knowledge = list(/datum/eldritch_knowledge/armor/ash)
 	banned_knowledge = list(/datum/eldritch_knowledge/rust_blade_upgrade,/datum/eldritch_knowledge/flesh_blade_upgrade)
 	route = PATH_ASH
 
@@ -116,15 +116,3 @@
 	for(var/X in trait_list)
 		ADD_TRAIT(user,X,MAGIC_TRAIT)
 	return ..()
-
-/datum/eldritch_knowledge/final/ash_final/on_life(mob/user)
-	. = ..()
-	if(!finished)
-		return
-	var/turf/L = get_turf(user)
-	var/datum/gas_mixture/env = L.return_air()
-	for(var/turf/T as() in RANGE_TURFS(1,user))
-		env = T.return_air()
-		env.set_temperature(env.return_temperature() + 5 )
-		T.air_update_turf()
-	L.air_update_turf()

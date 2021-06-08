@@ -1,3 +1,5 @@
+#define REWIND_TIMER (20 SECONDS)
+
 /obj/effect/proc_holder/spell/targeted/ethereal_jaunt/shift/ash
 	name = "Ashen passage"
 	desc = "Low range spell allowing you to pass through a few walls."
@@ -28,6 +30,22 @@
 
 /obj/effect/temp_visual/dir_setting/ash_shift/out
 	icon_state = "ash_shift"
+
+/obj/effect/proc_holder/spell/targeted/ashen_rewind
+	name = "Ashen Rewind"
+	desc = "Low range spell allowing you to pass through a few walls."
+	clothes_req = FALSE
+	invocation = "ASH'S TO ASH'S, D'ST T' D'T!"
+	invocation_type = INVOCATION_WHISPER
+	charge_max = 500
+	range = -1
+	action_icon = 'icons/mob/actions/actions_ecult.dmi'
+	action_icon_state = "ash_shift"
+	action_background_icon_state = "bg_ecult"
+
+/obj/effect/proc_holder/spell/targeted/ashen_rewind/cast(list/targets, mob/user = usr)
+	user.AddComponent(/datum/component/dejavu)
+
 
 /obj/effect/proc_holder/spell/targeted/touch/mansus_grasp
 	name = "Mansus Grasp"
@@ -223,6 +241,10 @@
 	range = 7
 	speed = 2
 
+/obj/effect/proc_holder/spell/targeted/rust_bash
+	name = "Full Force Forward"
+	desc = "Shoulderbash ahead 3 tiles, knocking and stunning those hit down for 3 seconds and breaking all rusted terrain you try to bash through"
+	
 /obj/effect/proc_holder/spell/pointed/cleave
 	name = "Cleave"
 	desc = "Causes severe bleeding on a target and people around them"
@@ -343,6 +365,46 @@
 			M.take_damage(45, BURN, "melee", 1)
 		sleep(1.5)
 
+/obj/effect/proc_holder/spell/targeted/fiery_judgement
+	name = "Fiery Judgement"
+	desc = "Drains nearby alive people that are engulfed in flames. It heals 10 of each damage type per person. If a person is in critical condition it finishes them off."
+	invocation = "death"
+	invocation_type = INVOCATION_WHISPER
+	clothes_req = FALSE
+	action_background_icon_state = "bg_ecult"
+	range = -1
+	include_user = TRUE
+	charge_max = 300
+	action_icon = 'icons/mob/actions/actions_ecult.dmi'
+	action_icon_state = "smoke"
+
+/obj/effect/proc_holder/spell/targeted/fiery_judgement/cast(list/targets, mob/user)
+	if(!ishuman(user))
+		return
+	for(var/mob/living/carbon/target in ohearers(7,user))
+		if(target.stat == DEAD || !target.on_fire)
+			continue
+		//This is essentially a death mark, use this to finish your opponent quicker.
+		if(target.InCritical())
+			target.dust()
+		if(target.fire_stacks >> 5)
+		target.adjustFireLoss(40)
+		target.ExtinguishMob()
+		new /obj/effect/temp_visual/eldritch_smoke(target.drop_location())
+
+/obj/effect/proc_holder/spell/targeted/slither
+	name = "WIP slither"
+	desc = "wip"
+	invocation = "death"
+	invocation_type = INVOCATION_WHISPER
+	clothes_req = FALSE
+	action_background_icon_state = "bg_ecult"
+	range = -1
+	include_user = TRUE
+	charge_max = 300
+	action_icon = 'icons/mob/actions/actions_ecult.dmi'
+	action_icon_state = "smoke"
+
 /obj/effect/proc_holder/spell/targeted/shapeshift/eldritch
 	invocation = "SH'PE"
 	invocation_type = INVOCATION_WHISPER
@@ -418,10 +480,11 @@
 	var/mob/user
 
 /obj/effect/proc_holder/spell/targeted/trial_by_fire/cast(list/targets, mob/user)
+	user.say("thou have failed your father and shall rise again, a phoenix from the ashes, listen to the words of his as they burn into your skull. Feel the flame consume you as it leaves the purity, fear him as the day has come and you shall be judged. Fear not your Saviour as there is life after in a perfect place where the pure shall reside.")
 	. = ..()
-	user.say("Point before active toggle reached")
 	active = !active
-	if(active)
+	while(active)
+		sleep(20)
 		for(var/mob/living/carbon/human/human_in_range in hearers(25,user))
 			if(IS_HERETIC(human_in_range) || IS_HERETIC_MONSTER(human_in_range))
 				continue
@@ -436,15 +499,18 @@
 				human_in_range.emote(pick("laugh","cry"))
 
 			if(prob(30))
-				human_in_range.forcesay(pick("FORGIVE ME FATHER FOR I HAVE SINNED!!!","PLEASE, I BEG YOU!!!","ALL HAIL THE ASHLORD, FOR HE WILL CLEANSE US!!!", "THE CLEANSER HAS ARRIVED, THE END IS NIGH!", "AS A PHOENIX FROM THE ASHES WE SHALL RISE AGAIN!!!"))
+				human_in_range.say(pick("FORGIVE ME FATHER FOR I HAVE SINNED!!!", "PLEASE, I BEG YOU!!!", "ALL HAIL THE ASHLORD, FOR HE WILL CLEANSE US!!!", "THE CLEANSER HAS ARRIVED, THE END IS NIGH!", "AS A PHOENIX FROM THE ASHES WE SHALL RISE AGAIN!!!"))
 
 			if(prob(35))
 				human_in_range.emote(pick("giggle","laugh"))
 
 			if(prob(30))
 				human_in_range.Dizzy(5)
-	else
-		return
+
+			if(prob(5))
+				if(human_in_range.anti_magic_check())
+					return BULLET_ACT_BLOCK
+				explosion(human_in_range.loc, 1, 0, 1, 1, FALSE, FALSE, 1)
 
 /obj/effect/proc_holder/spell/targeted/worm_contract
 	name = "Force Contract"

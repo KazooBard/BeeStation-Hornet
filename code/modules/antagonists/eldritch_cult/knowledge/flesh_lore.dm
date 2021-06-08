@@ -15,11 +15,12 @@
 	gain_text = "I found notes of a dark ritual, unfinished... yet still, I pushed forward."
 	cost = 1
 	required_atoms = list(/mob/living/carbon/human,/obj/item/reagent_containers/food/snacks/grown/poppy)
-	next_knowledge = list(/datum/eldritch_knowledge/flesh_mark,/datum/eldritch_knowledge/armor,/datum/eldritch_knowledge/ashen_eyes)
+	next_knowledge = list(/datum/eldritch_knowledge/flesh_blade_upgrade)
 	route = PATH_FLESH
 	var/max_amt = 2
 	var/current_amt = 0
 	var/list/ghouls = list()
+
 
 /datum/eldritch_knowledge/flesh_ghoul/on_finished_recipe(mob/living/user,list/atoms,loc)
 	var/mob/living/carbon/human/humie = locate() in atoms
@@ -70,12 +71,13 @@
 	humie.mind.remove_antag_datum(/datum/antagonist/heretic_monster)
 	UnregisterSignal(source,COMSIG_MOB_DEATH)
 
+
 /datum/eldritch_knowledge/flesh_grasp
 	name = "Grasp of Flesh"
 	gain_text = "My new found desires drove me to greater and greater heights."
 	desc = "Empowers your mansus grasp to be able to create a single ghoul out of a dead person. Ghouls have only 25 HP and look like husks to the heathens' eyes."
 	cost = 1
-	next_knowledge = list(/datum/eldritch_knowledge/flesh_ghoul)
+	next_knowledge = list(/datum/eldritch_knowledge/summon/stalker)
 	var/ghoul_amt = 1
 	var/list/spooky_scaries
 	route = PATH_FLESH
@@ -134,12 +136,31 @@
 	if(E)
 		E.on_effect()
 
+/datum/eldritch_knowledge/summon/stalker
+	name = "Lonely Ritual"
+	gain_text = "I was able to combine my greed and desires to summon an eldritch beast I had never seen before. An ever shapeshifting mass of flesh, it knew well my goals."
+	desc = "You can now summon a Stalker by transmutating a kitchen knife, a poppy, a pen and a piece of paper. Stalkers can shapeshift into harmless animals to get close to the victim."
+	cost = 1
+	required_atoms = list(/obj/item/kitchen/knife, /obj/item/pen,/obj/item/paper)
+	mob_to_summon = /mob/living/simple_animal/hostile/eldritch/stalker
+	next_knowledge = list(/datum/eldritch_knowledge/spell/slither)
+	route = PATH_FLESH
+
+/datum/eldritch_knowledge/spell/slither
+	name = "Night Crawl"
+	gain_text = "The Uncanny Man, who walks alone in the valley between the worlds... I was able to summon his aid."
+	desc = "You can now summon a Raw Prophet by transmutating a pair of eyes, a pair of arms and a pool of blood. Raw prophets have increased seeing range, as well as X-Ray vision, but they are very fragile."
+	cost = 1
+	spell_to_add = /obj/effect/proc_holder/spell/targeted/slither
+	next_knowledge = list(/datum/eldritch_knowledge/flesh_mark,/datum/eldritch_knowledge/spell/blood_siphon,/datum/eldritch_knowledge/curse/paralysis)
+	route = PATH_FLESH
+
 /datum/eldritch_knowledge/flesh_mark
 	name = "Mark of Flesh"
 	gain_text = "I saw them, the marked ones. The screams... the silence."
 	desc = "Your Mansus Grasp now applies the Mark of Flesh on hit. Attack the afflicted with your Sickly Blade to detonate the mark. Upon detonation, the Mark of Flesh causes additional bleeding."
 	cost = 2
-	next_knowledge = list(/datum/eldritch_knowledge/summon/raw_prophet)
+	next_knowledge = list(/datum/eldritch_knowledge/spell/cleave)
 	banned_knowledge = list(/datum/eldritch_knowledge/rust_mark,/datum/eldritch_knowledge/ash_mark)
 	route = PATH_FLESH
 
@@ -149,13 +170,22 @@
 		var/mob/living/living_target = target
 		living_target.apply_status_effect(/datum/status_effect/eldritch/flesh)
 
+/datum/eldritch_knowledge/spell/cleave
+	name = "Blood Cleave"
+	gain_text = "At first I didn't understand these instruments of war, but the priest told me to use them regardless. Soon, he said, I would know them well."
+	desc = "Gives AOE spell that causes heavy bleeding and blood loss."
+	cost = 1
+	spell_to_add = /obj/effect/proc_holder/spell/pointed/cleave
+	next_knowledge = list(/datum/eldritch_knowledge/armor/flesh, /datum/eldritch_knowledge/flesh_blade_upgrade)
+	route = PATH_FLESH
+
 /datum/eldritch_knowledge/flesh_blade_upgrade
 	name = "Bleeding Steel"
 	gain_text = "And then, blood rained from the heavens. That's when I finally understood the Marshal's teachings."
 	desc = "Your Sickly Blade will now cause additional bleeding."
 	cost = 2
-	next_knowledge = list(/datum/eldritch_knowledge/summon/stalker)
-	banned_knowledge = list(/datum/eldritch_knowledge/ash_blade_upgrade,/datum/eldritch_knowledge/rust_blade_upgrade)
+	next_knowledge = list()
+	banned_knowledge = list(/datum/eldritch_knowledge/ash_blade_upgrade, /datum/eldritch_knowledge/rust_blade_upgrade)
 	route = PATH_FLESH
 
 /datum/eldritch_knowledge/flesh_blade_upgrade/on_eldritch_blade(target,user,proximity_flag,click_parameters)
@@ -164,25 +194,7 @@
 		var/mob/living/carbon/human/H = target
 		H.bleed_rate+= 2
 
-/datum/eldritch_knowledge/summon/raw_prophet
-	name = "Raw Ritual"
-	gain_text = "The Uncanny Man, who walks alone in the valley between the worlds... I was able to summon his aid."
-	desc = "You can now summon a Raw Prophet by transmutating a pair of eyes, a pair of arms and a pool of blood. Raw prophets have increased seeing range, as well as X-Ray vision, but they are very fragile."
-	cost = 1
-	required_atoms = list(/obj/item/organ/eyes,/obj/item/bodypart/l_arm,/obj/item/bodypart/r_arm,/obj/effect/decal/cleanable/blood)
-	mob_to_summon = /mob/living/simple_animal/hostile/eldritch/raw_prophet
-	next_knowledge = list(/datum/eldritch_knowledge/flesh_blade_upgrade,/datum/eldritch_knowledge/spell/blood_siphon,/datum/eldritch_knowledge/curse/paralysis)
-	route = PATH_FLESH
 
-/datum/eldritch_knowledge/summon/stalker
-	name = "Lonely Ritual"
-	gain_text = "I was able to combine my greed and desires to summon an eldritch beast I had never seen before. An ever shapeshifting mass of flesh, it knew well my goals."
-	desc = "You can now summon a Stalker by transmutating a kitchen knife, a poppy, a pen and a piece of paper. Stalkers can shapeshift into harmless animals to get close to the victim."
-	cost = 1
-	required_atoms = list(/obj/item/kitchen/knife,/obj/item/reagent_containers/food/snacks/grown/poppy,/obj/item/pen,/obj/item/paper)
-	mob_to_summon = /mob/living/simple_animal/hostile/eldritch/stalker
-	next_knowledge = list(/datum/eldritch_knowledge/summon/ashy,/datum/eldritch_knowledge/summon/rusty,/datum/eldritch_knowledge/final/flesh_final)
-	route = PATH_FLESH
 
 /datum/eldritch_knowledge/final/flesh_final
 	name = "Priest's Final Hymn"

@@ -31,21 +31,12 @@
 		if(E)
 			E.on_effect()
 
-/datum/eldritch_knowledge/spell/area_conversion
-	name = "Agressive Spread"
-	desc = "Spreads rust to nearby surfaces. Already rusted surfaces are destroyed."
-	gain_text = "All wise men know well not to touch the Bound King."
-	cost = 1
-	spell_to_add = /obj/effect/proc_holder/spell/aoe_turf/rust_conversion
-	next_knowledge = list(/datum/eldritch_knowledge/rust_blade_upgrade,/datum/eldritch_knowledge/curse/corrosion,/datum/eldritch_knowledge/spell/blood_siphon)
-	route = PATH_RUST
-
 /datum/eldritch_knowledge/rust_regen
 	name = "Leeching Walk"
 	desc = "Passively heals you when you are on rusted tiles."
 	gain_text = "The strength was unparalleled, unnatural. The Blacksmith was smiling."
 	cost = 1
-	next_knowledge = list(/datum/eldritch_knowledge/rust_mark,/datum/eldritch_knowledge/armor,/datum/eldritch_knowledge/essence)
+	next_knowledge = list(/datum/eldritch_knowledge/spell/rust_bash)
 	route = PATH_RUST
 
 /datum/eldritch_knowledge/rust_regen/on_life(mob/user)
@@ -60,6 +51,15 @@
 	living_user.adjustOxyLoss(-0.5, FALSE)
 	living_user.adjustStaminaLoss(-2)
 	living_user.AdjustAllImmobility(-5)
+
+/datum/eldritch_knowledge/spell/rust_bash
+	name = "Full force forward"
+	desc = "Gives you the ability to shoulderbash ahead 3 tiles, knocking and stunning those hit down for 3 seconds and breaking all rusted terrain you try to bash through"
+	gain_text = "I found my strenght in repentance, as I shall break through the rust and destroy those stopping me from reuniting with HIM."
+	cost = 1
+	spell_to_add = /obj/effect/proc_holder/spell/targeted/rust_bash
+	next_knowledge = /datum/eldritch_knowledge/rust_mark
+	route = PATH_RUST
 
 /datum/eldritch_knowledge/rust_mark
 	name = "Mark of Rust"
@@ -76,13 +76,31 @@
 		var/mob/living/living_target = target
 		living_target.apply_status_effect(/datum/status_effect/eldritch/rust)
 
+/datum/eldritch_knowledge/spell/area_conversion
+	name = "Agressive Spread"
+	desc = "Spreads rust to nearby surfaces. Already rusted surfaces are destroyed."
+	gain_text = "All wise men know well not to touch the Bound King."
+	cost = 1
+	spell_to_add = /obj/effect/proc_holder/spell/aoe_turf/rust_conversion
+	next_knowledge = list(/datum/eldritch_knowledge/armor/rust,/datum/eldritch_knowledge/rust_blade_upgrade,/datum/eldritch_knowledge/spell/rust_wave )
+	route = PATH_RUST
+
+/datum/eldritch_knowledge/spell/rust_wave
+	name = "Wave of Corrosion"
+	desc = "You can now send a projectile that converts an area into rust and damages the target's clothes."
+	gain_text = "Messenger's of hope fear the rustbringer!"
+	cost = 1
+	spell_to_add = /obj/effect/proc_holder/spell/targeted/projectile/dumbfire/rust_wave
+	next_knowledge = list()
+	route = PATH_RUST
+
 /datum/eldritch_knowledge/rust_blade_upgrade
 	name = "Toxic blade"
 	desc = "Your blade of choice will now poison your enemies on hit."
 	gain_text = "The Blade will guide you through the flesh, should you let it."
 	desc = "Your blade of choice will now transfer your pain as toxic damage."
 	cost = 2
-	next_knowledge = list(/datum/eldritch_knowledge/spell/rust_wave)
+	next_knowledge = list()
 	banned_knowledge = list(/datum/eldritch_knowledge/ash_blade_upgrade,/datum/eldritch_knowledge/flesh_blade_upgrade)
 	route = PATH_RUST
 
@@ -93,14 +111,6 @@
 	if(istype(carbon_user) && istype(carbon_target))
 		carbon_target.adjustToxLoss((carbon_user.maxHealth - carbon_user.health)/10)
 
-/datum/eldritch_knowledge/spell/rust_wave
-	name = "Wave of Rust"
-	desc = "You can now send a projectile that converts an area into rust."
-	gain_text = "Messenger's of hope fear the rustbringer!"
-	cost = 1
-	spell_to_add = /obj/effect/proc_holder/spell/targeted/projectile/dumbfire/rust_wave
-	next_knowledge = list(/datum/eldritch_knowledge/final/rust_final,/datum/eldritch_knowledge/spell/cleave,/datum/eldritch_knowledge/summon/rusty)
-	route = PATH_RUST
 
 /datum/eldritch_knowledge/final/rust_final
 	name = "Rustbringer's Oath"
