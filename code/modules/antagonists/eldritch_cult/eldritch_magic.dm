@@ -44,7 +44,10 @@
 	action_background_icon_state = "bg_ecult"
 
 /obj/effect/proc_holder/spell/targeted/ashen_rewind/cast(list/targets, mob/user = usr)
-	user.AddComponent(/datum/component/dejavu)
+	. = ..()
+	if(isliving(user))
+		var/mob/living/living_target = user
+		living_target.apply_status_effect(/datum/status_effect/rewindtime)
 
 
 /obj/effect/proc_holder/spell/targeted/touch/mansus_grasp
@@ -244,7 +247,7 @@
 /obj/effect/proc_holder/spell/targeted/rust_bash
 	name = "Full Force Forward"
 	desc = "Shoulderbash ahead 3 tiles, knocking and stunning those hit down for 3 seconds and breaking all rusted terrain you try to bash through"
-	
+
 /obj/effect/proc_holder/spell/pointed/cleave
 	name = "Cleave"
 	desc = "Causes severe bleeding on a target and people around them"
@@ -388,8 +391,8 @@
 		if(target.InCritical())
 			target.dust()
 		if(target.fire_stacks >> 5)
-		target.adjustFireLoss(40)
-		target.ExtinguishMob()
+			target.adjustFireLoss(40)
+			target.ExtinguishMob()
 		new /obj/effect/temp_visual/eldritch_smoke(target.drop_location())
 
 /obj/effect/proc_holder/spell/targeted/slither
@@ -542,9 +545,9 @@
 	duration = 10
 
 /obj/effect/proc_holder/spell/targeted/fiery_rebirth
-	name = "Nightwatcher's Rebirth"
+	name = "Cleanser's Blessing"
 	desc = "Drains nearby alive people that are engulfed in flames. It heals 10 of each damage type per person. If a person is in critical condition it finishes them off."
-	invocation = "GL'RY T' TH' N'GHT'W'TCH'ER"
+	invocation = "B'COM'tH S'LVE F'R MY WOUNDS"
 	invocation_type = INVOCATION_WHISPER
 	clothes_req = FALSE
 	action_background_icon_state = "bg_ecult"
@@ -572,6 +575,34 @@
 		human_user.adjustStaminaLoss(-10, FALSE)
 		human_user.adjustToxLoss(-10, FALSE)
 		human_user.adjustOxyLoss(-10)
+
+/obj/effect/proc_holder/spell/targeted/fiery_judgement
+	name = "Cleanser's Curse"
+	desc = "Drains nearby alive people that are engulfed in flames. It heals 10 of each damage type per person. If a person is in critical condition it finishes them off."
+	invocation = "B'COM'TH DUST"
+	invocation_type = INVOCATION_WHISPER
+	clothes_req = FALSE
+	action_background_icon_state = "bg_ecult"
+	range = -1
+	include_user = TRUE
+	charge_max = 600
+	action_icon = 'icons/mob/actions/actions_ecult.dmi'
+	action_icon_state = "smoke"
+
+/obj/effect/proc_holder/spell/targeted/fiery_judgement/cast(list/targets, mob/user)
+	if(!ishuman(user))
+		return
+	var/mob/living/carbon/human/human_user = user
+	for(var/mob/living/carbon/target in ohearers(7,user))
+		if(target.stat == DEAD || !target.on_fire)
+			continue
+		//This is essentially a death mark, use this to finish your opponent quicker.
+		if(target.InCritical())
+			target.death()
+		target.adjustFireLoss(25)
+		target.Paralyze(90)
+		new /obj/effect/temp_visual/eldritch_smoke(target.drop_location())
+		human_user.ExtinguishMob()
 
 /obj/effect/proc_holder/spell/targeted/shed_human_form
 	name = "Shed form"

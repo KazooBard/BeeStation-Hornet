@@ -316,7 +316,3 @@
 	melee_damage = 0
 	search_objects = 0
 
-/mob/living/simple_animal/hostile/poison/bees/mosquitos/AttackingTarget(/mob/living)
-	var/mob/S = target
-	if(IS_HERETIC(target))
-		S.blood_volume -= 20

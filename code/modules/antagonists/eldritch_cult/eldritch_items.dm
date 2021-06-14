@@ -184,11 +184,11 @@
 	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_TEMP_PROTECT
 	// slightly better than normal cult robes
-	armor = list("melee" = 50, "bullet" = 50, "laser" = 50,"energy" = 50, "bomb" = 35, "bio" = 20, "rad" = 0, "fire" = 20, "acid" = 20, "stamina" = 30)
+	armor = list("melee" = 50, "bullet" = 50, "laser" = 50,"energy" = 50, "bomb" = 35, "bio" = 20, "rad" = 0, "fire" = 20, "acid" = 20, "stamina" = 50)
 
 /obj/item/clothing/suit/hooded/cultrobes/eldritch/ash
 	name = "Cleanser's Robes"
-	armor = list("melee" = 40, "bullet" = 30, "laser" = 60,"energy" = 60, "bomb" = 40, "bio" = 35, "rad" = 0, "fire" = 100, "acid" = 20, "stamina" = 30)
+	armor = list("melee" = 40, "bullet" = 30, "laser" = 60,"energy" = 60, "bomb" = 40, "bio" = 35, "rad" = 0, "fire" = 100, "acid" = 20, "stamina" = 50)
 	var/mob/living/carbon/human/local_wearer
 	
 	
@@ -218,11 +218,11 @@
 
 /obj/item/clothing/suit/hooded/cultrobes/eldritch/flesh
 	name = "Witch's Gown"
-	armor = list("melee" = 25, "bullet" = 50, "laser" = 50,"energy" = 50, "bomb" = 40, "bio" = 35, "rad" = 100, "fire" = 20, "acid" = 30, "stamina" = 30)
+	armor = list("melee" = 25, "bullet" = 50, "laser" = 50,"energy" = 50, "bomb" = 40, "bio" = 35, "rad" = 100, "fire" = 20, "acid" = 30, "stamina" = 50)
 
 /obj/item/clothing/suit/hooded/cultrobes/eldritch/rust
 	name = "Martyr's Rags"
-	armor = list("melee" = 60, "bullet" = 40, "laser" = 40,"energy" = 40, "bomb" = 100, "bio" = 35, "rad" = 0, "fire" = 30, "acid" = 20, "stamina" = 15)
+	armor = list("melee" = 60, "bullet" = 40, "laser" = 40,"energy" = 40, "bomb" = 100, "bio" = 35, "rad" = 0, "fire" = 30, "acid" = 20, "stamina" = 60)
 	var/mob/living/carbon/human/local_wearer_rust
 	
 	

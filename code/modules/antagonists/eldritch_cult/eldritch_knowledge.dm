@@ -265,7 +265,6 @@
 		if(LH.target && LH.target.stat == DEAD)
 			to_chat(carbon_user,"<span class='danger'>Your patrons accepts your offer..</span>")
 			var/mob/living/carbon/human/H = LH.target
-			H.gib()
 			LH.target = null
 			var/datum/antagonist/heretic/EC = carbon_user.mind.has_antag_datum(/datum/antagonist/heretic)
 
@@ -274,7 +273,7 @@
 				if(!istype(X,/obj/item/forbidden_book))
 					continue
 				var/obj/item/forbidden_book/FB = X
-				FB.charge += 2
+				FB.charge += 3
 				break
 
 		if(!LH.target)
@@ -340,7 +339,7 @@
 	result_atoms = list(/obj/item/clothing/suit/hooded/cultrobes/eldritch)
 
 /datum/eldritch_knowledge/armor/ash
-	name = "Armorer's Ritual"
+	name = "STATION VII - Armorer's Ritual"
 	desc = "You can now create eldritch armor using a table and a gas mask."
 	gain_text = "For I am the heir to the throne of doom."
 	cost = 3
@@ -398,15 +397,6 @@
 	. = ..()
 	chosen_mob.remove_status_effect(/datum/status_effect/corrosion_curse)
 
-/datum/eldritch_knowledge/curse/paralysis
-	name = "Curse of Paralysis"
-	gain_text = "Corrupt their flesh, make them bleed."
-	desc = "Curse someone for 5 minutes of inability to walk. Using a left leg, right leg, a hatchet and an item that the victim touched  with their bare hands. "
-	cost = 1
-	required_atoms = list(/obj/item/bodypart/l_leg,/obj/item/bodypart/r_leg,/obj/item/hatchet)
-	next_knowledge = list(/datum/eldritch_knowledge/summon/raw_prophet)
-	timer = 5 MINUTES
-
 /datum/eldritch_knowledge/curse/paralysis/curse(mob/living/chosen_mob)
 	. = ..()
 	ADD_TRAIT(chosen_mob,TRAIT_PARALYSIS_L_LEG,MAGIC_TRAIT)
@@ -427,7 +417,7 @@
 	desc = "You gain a spell that drains health from your enemies to restores your own."
 	cost = 1
 	spell_to_add = /obj/effect/proc_holder/spell/targeted/touch/blood_siphon
-	next_knowledge = list(/datum/eldritch_knowledge/summon/raw_prophet,/datum/eldritch_knowledge/spell/area_conversion)
+	next_knowledge = list(/datum/eldritch_knowledge/spell/area_conversion)
 
 //	--- SUMMONS ---
 
